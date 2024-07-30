@@ -1,4 +1,4 @@
-import {createSlice, nanoid} from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 // the (nanoid) generates unique ids
 // we will create an initial state for the store, just like we did passed an
@@ -19,22 +19,42 @@ export const todoSlice = createSlice({
     reducers: {
         addTodo: (state, action) => {
             let todo = {
-                    id: nanoid(),
-                    text: action.payload
-                }
-                state.todos.push(todo)
-                },
+                id: nanoid(),
+                text: action.payload
+            }
+            console.log(action);
+            // thebelow is what we are gettiing when we are logging the action:
+            //             Object { type: "todo/addTodo", payload: "sjvg" }
+            // ​
+            // payload: "sjvg"
+            // ​
+            // type: "todo/addTodo"
+            // ​
+            // <prototype>: Object { … }
+            // console.log(action.payload);
+            state.todos.push(todo);
+        },
         removeTodo: (state, action) => {
             state.todos = state.todos.filter((todo) => todo.id !== action.payload)
+        },
+        updateTodo: (state, action) => {
+            state.todos = state.todos.map((todo) => {
+                if(todo.id === action.payload.todoId) {
+                    return ({...todo, text: action.payload.updatedText})
+                }
+                return todo
+            })
         }
     }
 })
 
-export const {addTodo, removeTodo} = todoSlice.actions
+export const { addTodo, removeTodo, updateTodo } = todoSlice.actions
 let todoReducer = todoSlice.reducer;
 export default todoReducer;
 
-// in the above that (state) is initialState we made on ourselves
+// store only updates vaulues only from those reducers which it has access.
+
+// in the above that (state) is initialState we made on ourselves and will get updated whenever we make changes to the state
 
 // payload is an object which can contain id etc
 
